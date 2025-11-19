@@ -1,0 +1,17 @@
+{
+	"name": "futurepipebinary",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "futurepipeblobstorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "raw-docs"
+			}
+		}
+	}
+}
