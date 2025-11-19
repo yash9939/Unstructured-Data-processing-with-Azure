@@ -1,0 +1,15 @@
+{
+	"name": "futurepipecosmosOutput",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "futurepipecosmsodb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {},
+		"typeProperties": {
+			"collectionName": "documents"
+		}
+	}
+}
