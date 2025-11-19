@@ -1,0 +1,9 @@
+{
+	"name": "futurepipedf",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "85dcd0b0-a572-47fd-a7f3-5f16a01fa054",
+		"tenantId": "e14e73eb-5251-4388-8d67-8f9f2e2d5a46"
+	}
+}
