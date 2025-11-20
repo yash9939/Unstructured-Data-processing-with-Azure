@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -45,8 +46,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"method": "POST",
+					"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-read:analyze?api-version=2023-07-31",
 					"authentication": {
-						"type": "Basic"
+						"type": "Basic",
+						"password": {
+							"type": "SecureString",
+							"value": "**********"
+						}
 					}
 				}
 			},
@@ -58,7 +64,10 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": ""
+				}
 			}
 		],
 		"annotations": []
