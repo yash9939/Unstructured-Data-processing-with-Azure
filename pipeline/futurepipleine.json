@@ -35,6 +35,8 @@
 			{
 				"name": "Doc_Analyze",
 				"type": "WebActivity",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -47,6 +49,10 @@
 				"typeProperties": {
 					"method": "POST",
 					"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-read:analyze?api-version=2023-07-31",
+					"body": {
+						"value": "@dataset().sasurl",
+						"type": "Expression"
+					},
 					"authentication": {
 						"type": "Basic",
 						"password": {
@@ -59,6 +65,8 @@
 			{
 				"name": "Parsing",
 				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureOutput": false,
@@ -66,7 +74,8 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": ""
+					"variableName": "",
+					"value": ""
 				}
 			}
 		],
