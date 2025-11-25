@@ -5,6 +5,11 @@
 			"referenceName": "futurepipeblobstorage",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"sasurl": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {
