@@ -52,6 +52,9 @@
 				"userProperties": [],
 				"typeProperties": {
 					"method": "POST",
+					"headers": {
+						"\tOcp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
+					},
 					"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-read:analyze?api-version=2023-07-31",
 					"body": {
 						"value": "@pipeline().parameters.sasurl",
