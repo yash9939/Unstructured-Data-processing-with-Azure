@@ -7,7 +7,8 @@
 		},
 		"parameters": {
 			"sasurl": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "https://futurestorage.blob.core.windows.net/raw-docs?sp=r&st=2025-11-26T19:46:40Z&se=2025-11-28T04:01:40Z&spr=https&sv=2024-11-04&sr=c&sig=011tgciBjTV85mVTNqD02My8FASydryBCPg1kZSbMXM%3D"
 			}
 		},
 		"annotations": [],
