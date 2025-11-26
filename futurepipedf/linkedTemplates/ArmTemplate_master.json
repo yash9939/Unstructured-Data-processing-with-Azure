@@ -1,0 +1,77 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "futurepipedf"
+		},
+		"futurepipecosmsodb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'futurepipecosmsodb'"
+		},
+		"futurepipedocai_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'futurepipedocai'"
+		},
+		"futurepipeblobstorage_properties_typeProperties_serviceEndpoint": {
+			"type": "string",
+			"defaultValue": "https://futurestorage.blob.core.windows.net/"
+		},
+		"futurepipedocai_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://pipeai.cognitiveservices.azure.com/"
+		},
+		"futurepipedocai_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "future.pipe"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "futurepipedf_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"futurepipecosmsodb_connectionString": {
+						"value": "[parameters('futurepipecosmsodb_connectionString')]"
+					},
+					"futurepipedocai_password": {
+						"value": "[parameters('futurepipedocai_password')]"
+					},
+					"futurepipeblobstorage_properties_typeProperties_serviceEndpoint": {
+						"value": "[parameters('futurepipeblobstorage_properties_typeProperties_serviceEndpoint')]"
+					},
+					"futurepipedocai_properties_typeProperties_url": {
+						"value": "[parameters('futurepipedocai_properties_typeProperties_url')]"
+					},
+					"futurepipedocai_properties_typeProperties_userName": {
+						"value": "[parameters('futurepipedocai_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "futurepipedf"
+		},
+		"futurepipecosmsodb_connectionString": {
+			"value": ""
+		},
+		"futurepipedocai_password": {
+			"value": ""
+		},
+		"futurepipeblobstorage_properties_typeProperties_serviceEndpoint": {
+			"value": "https://futurestorage.blob.core.windows.net/"
+		},
+		"futurepipedocai_properties_typeProperties_url": {
+			"value": "https://pipeai.cognitiveservices.azure.com/"
+		},
+		"futurepipedocai_properties_typeProperties_userName": {
+			"value": "future.pipe"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
