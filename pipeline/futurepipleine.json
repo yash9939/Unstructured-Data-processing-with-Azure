@@ -55,9 +55,9 @@
 					"headers": {
 						"\tOcp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
 					},
-					"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-read:analyzeBatch?api-version=2023-07-31",
+					"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-read:analyzeBatch?api-version=2023-02-28",
 					"body": {
-						"value": "{\n  \"azureBlobSource\": {\n    \"containerUrl\": \"@pipeline().parameters.sasurl\" \n    // Input container URL with SAS token\n  },\n  \"resultContainerUrl\": \"@pipeline().parameters.resultcontainersas\"\n}",
+						"value": "{\n    \"containerUrl\": \"@pipeline().parameters.sasurl\",\n  \"resultContainerUrl\": \"@pipeline().parameters.resultcontainersas\",\n}",
 						"type": "Expression"
 					},
 					"authentication": {
