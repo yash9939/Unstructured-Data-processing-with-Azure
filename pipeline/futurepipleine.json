@@ -41,7 +41,14 @@
 			{
 				"name": "Doc_Analyze",
 				"type": "WebActivity",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Input_Meta_Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -68,20 +75,6 @@
 							"value": "**********"
 						}
 					}
-				}
-			},
-			{
-				"name": "Parsing",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"policy": {
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "",
-					"value": ""
 				}
 			}
 		],
