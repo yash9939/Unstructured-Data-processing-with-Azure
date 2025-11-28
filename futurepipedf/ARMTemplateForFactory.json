@@ -54,7 +54,12 @@
 							"dataset": {
 								"referenceName": "futurepipebinary",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"sasurl": {
+										"value": "@pipeline().parameters.sasurl",
+										"type": "Expression"
+									}
+								}
 							},
 							"fieldList": [
 								"childItems"
@@ -70,60 +75,151 @@
 						}
 					},
 					{
-						"name": "Doc_Analyze",
-						"type": "WebActivity",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Input_Meta_Data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
-							"method": "POST",
-							"headers": {},
-							"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-read:analyze?api-version=2023-07-31",
-							"body": {
-								"value": "@dataset().sasurl",
+							"items": {
+								"value": "@activity('Input_Meta_Data').output.childItems",
 								"type": "Expression"
 							},
-							"authentication": {
-								"type": "Basic",
-								"password": {
-									"type": "SecureString",
-									"value": "**********"
+							"activities": [
+								{
+									"name": "Doc_Analyze",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"method": "POST",
+										"headers": {
+											"\tOcp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
+										},
+										"linkedServices": [
+											{
+												"referenceName": "futurepipedocai",
+												"type": "LinkedServiceReference"
+											}
+										],
+										"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-layout:analyze?api-version=2024-02-29",
+										"body": {
+											"value": "@concat('{ \"urlSource\": \"', pipeline().parameters.sasurl, '/', item().name, '\" }')",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "Basic",
+											"username": "future_pipe",
+											"password": {
+												"type": "SecureString",
+												"value": "**********"
+											}
+										}
+									}
+								},
+								{
+									"name": "save_to_processed",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Doc_Analyze",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"additionalColumns": [
+												{
+													"name": "WeActivityOutput",
+													"value": {
+														"value": "@string(activity('Doc_Analyze').output.ADFWebActivityResponseHeaders)",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "dummydataset",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "futurepipeoutput",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
 								}
-							}
-						}
-					},
-					{
-						"name": "Parsing",
-						"type": "SetVariable",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
-						"dependsOn": [],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "",
-							"value": ""
+							]
 						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
+				"parameters": {
+					"sasurl": {
+						"type": "string",
+						"defaultValue": "https://futurestorage.blob.core.windows.net/raw-docs?sp=rl&st=2025-11-28T20:09:43Z&se=2025-11-30T04:24:43Z&spr=https&sv=2024-11-04&sr=c&sig=eD1hsuXsiZAHtFPvmQRO8e7Bzmb7M%2F1AZwVmgpp%2FOZo%3D"
+					},
+					"resultcontainersas": {
+						"type": "string",
+						"defaultValue": "https://futurestorage.blob.core.windows.net/processed?sp=ral&st=2025-11-26T20:40:55Z&se=2025-11-28T04:55:55Z&spr=https&sv=2024-11-04&sr=c&sig=TlfLydnIG4tJT%2BUcc6zn4fjXCYrAtMwAEXL%2FB4xqN5c%3D"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/futurepipebinary')]"
+				"[concat(variables('factoryId'), '/datasets/futurepipebinary')]",
+				"[concat(variables('factoryId'), '/linkedServices/futurepipedocai')]",
+				"[concat(variables('factoryId'), '/datasets/dummydataset')]",
+				"[concat(variables('factoryId'), '/datasets/futurepipeoutput')]"
 			]
 		},
 		{
@@ -137,8 +233,7 @@
 				},
 				"parameters": {
 					"sasurl": {
-						"type": "string",
-						"defaultValue": "https://futurestorage.blob.core.windows.net/raw-docs?sp=r&st=2025-11-26T19:46:40Z&se=2025-11-28T04:01:40Z&spr=https&sv=2024-11-04&sr=c&sig=011tgciBjTV85mVTNqD02My8FASydryBCPg1kZSbMXM%3D"
+						"type": "string"
 					}
 				},
 				"annotations": [],
@@ -220,6 +315,57 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/futurepipeoutput')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "futurepipeblobstorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "processed"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/futurepipeblobstorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dummydataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "futurepipeblobstorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "dummy.txt",
+						"container": "temp"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/futurepipeblobstorage')]"
+			]
 		}
 	]
 }
