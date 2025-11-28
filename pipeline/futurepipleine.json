@@ -73,7 +73,7 @@
 								"headers": {
 									"\tOcp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
 								},
-								"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-layout:analyze?api-version=2024-02-29",
+								"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-layout:analyze?api-version=2024-02-29",
 								"body": {
 									"value": "@concat('{ \"urlSource\": \"', pipeline().parameters.sasurl, '/', item().name, '\" }')",
 									"type": "Expression"
