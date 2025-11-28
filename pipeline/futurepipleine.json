@@ -70,7 +70,7 @@
 					],
 					"url": "https://pipeai.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-layout:analyze?api-version=2024-02-29",
 					"body": {
-						"value": "{\n    \"containerUrl\": \"@pipeline().parameters.sasurl\"\n}",
+						"value": "{\n    \"urlSource\": \"@pipeline().parameters.sasurl\"\n}",
 						"type": "Expression"
 					},
 					"authentication": {
