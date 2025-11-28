@@ -5,8 +5,6 @@
 			{
 				"name": "Input_Meta_Data",
 				"type": "GetMetadata",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -43,8 +41,6 @@
 			{
 				"name": "Doc_Analyze",
 				"type": "WebActivity",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Input_Meta_Data",
@@ -84,7 +80,14 @@
 			{
 				"name": "save_to_processed",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Doc_Analyze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -100,7 +103,7 @@
 							{
 								"name": "WeActivityOutput",
 								"value": {
-									"value": "@string(activity('Doc_Analyze').output.body)",
+									"value": "@string(activity('Doc_Analyze').output.ADFWebActivityResponseHeaders)",
 									"type": "Expression"
 								}
 							}
