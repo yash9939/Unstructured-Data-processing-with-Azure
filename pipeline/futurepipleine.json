@@ -113,9 +113,9 @@
 									"type": "DelimitedTextSource",
 									"additionalColumns": [
 										{
-											"name": "WeActivityOutput",
+											"name": "WebActivityOutput",
 											"value": {
-												"value": "@string(activity('Doc_Analyze').output.ADFWebActivityResponseHeaders)",
+												"value": "@string(activity('Doc_Analyze').output.Response)",
 												"type": "Expression"
 											}
 										}
