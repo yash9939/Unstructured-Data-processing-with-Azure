@@ -17,13 +17,7 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "futurepipebinary",
-						"type": "DatasetReference",
-						"parameters": {
-							"sasurl": {
-								"value": "@pipeline().parameters.sasurl",
-								"type": "Expression"
-							}
-						}
+						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"childItems"
@@ -41,6 +35,20 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Input_Meta_Data').output.childItems",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Doc_Analyze",
+				"type": "WebActivity",
 				"dependsOn": [
 					{
 						"activity": "Input_Meta_Data",
@@ -49,124 +57,116 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"items": {
-						"value": "@activity('Input_Meta_Data').output.childItems",
+					"method": "POST",
+					"headers": {
+						"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V",
+						"Content-Type": "application/json"
+					},
+					"url": "https://pipeai.cognitiveservices.azure.com",
+					"body": {
+						"value": "@concat('{ \"urlSource\": \"', pipeline().parameters.sasurl, '/', item().name, '\" }')",
 						"type": "Expression"
 					},
-					"activities": [
-						{
-							"name": "Doc_Analyze",
-							"type": "WebActivity",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"method": "POST",
-								"headers": {
-									"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V",
-									"Content-Type": "application/json"
-								},
-								"url": "https://pipeai.cognitiveservices.azure.com",
-								"body": {
-									"value": "@concat('{ \"urlSource\": \"', pipeline().parameters.sasurl, '/', item().name, '\" }')",
+					"authentication": {
+						"type": "Basic",
+						"username": "future_pipe",
+						"password": {
+							"type": "SecureString",
+							"value": "**********"
+						}
+					}
+				}
+			},
+			{
+				"name": "save_to_processed",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Doc_Analyze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"additionalColumns": [
+							{
+								"name": "WebActivityOutput",
+								"value": {
+									"value": "@string(activity('Doc_Analyze').output.Response)",
 									"type": "Expression"
-								},
-								"authentication": {
-									"type": "Basic",
-									"username": "future_pipe",
-									"password": {
-										"type": "SecureString",
-										"value": "**********"
-									}
 								}
 							}
+						],
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
 						},
-						{
-							"name": "save_to_processed",
-							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "Doc_Analyze",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "DelimitedTextSource",
-									"additionalColumns": [
-										{
-											"name": "WebActivityOutput",
-											"value": {
-												"value": "@string(activity('Doc_Analyze').output.Response)",
-												"type": "Expression"
-											}
-										}
-									],
-									"storeSettings": {
-										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
-									}
-								},
-								"sink": {
-									"type": "JsonSink",
-									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings"
-									},
-									"formatSettings": {
-										"type": "JsonWriteSettings"
-									}
-								},
-								"enableStaging": false
-							},
-							"inputs": [
-								{
-									"referenceName": "dummydataset",
-									"type": "DatasetReference"
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "futurepipeoutput",
-									"type": "DatasetReference"
-								}
-							]
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
 						}
-					]
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "dummydataset",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "futurepipeoutput",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"enableStaging": false
 				}
 			}
 		],
-		"parameters": {
-			"sasurl": {
-				"type": "string",
-				"defaultValue": "https://futurestorage.blob.core.windows.net/raw-docs?sp=rl&st=2025-11-28T20:09:43Z&se=2025-11-30T04:24:43Z&spr=https&sv=2024-11-04&sr=c&sig=eD1hsuXsiZAHtFPvmQRO8e7Bzmb7M%2F1AZwVmgpp%2FOZo%3D"
-			},
-			"resultcontainersas": {
-				"type": "string",
-				"defaultValue": "https://futurestorage.blob.core.windows.net/processed?sp=ral&st=2025-11-26T20:40:55Z&se=2025-11-28T04:55:55Z&spr=https&sv=2024-11-04&sr=c&sig=TlfLydnIG4tJT%2BUcc6zn4fjXCYrAtMwAEXL%2FB4xqN5c%3D"
-			}
-		},
 		"annotations": []
 	}
 }
