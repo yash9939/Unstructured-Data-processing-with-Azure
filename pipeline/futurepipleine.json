@@ -49,9 +49,14 @@
 			{
 				"name": "Doc_Analyze",
 				"type": "WebActivity",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Input_Meta_Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -66,9 +71,9 @@
 						"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V",
 						"Content-Type": "application/json"
 					},
-					"url": "https://pipeai.cognitiveservices.azure.com",
+					"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
 					"body": {
-						"value": "@concat('{ \"urlSource\": \"', pipeline().parameters.sasurl, '/', item().name, '\" }')",
+						"value": "{\n  \"urlSource\": \"https://futurestorage.blob.core.windows.net/raw-docs/test_image.jpeg?sp=r&st=2025-12-03T18:37:34Z&se=2025-12-05T02:52:34Z&spr=https&sv=2024-11-04&sr=b&sig=OWWwKG6wmdA7Rzt6QvXI4Vxejgko9seuZ0jO7GKjI8s%3D\"\n}\n",
 						"type": "Expression"
 					},
 					"authentication": {
@@ -84,9 +89,14 @@
 			{
 				"name": "save_to_processed",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Final_Output",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -102,7 +112,7 @@
 							{
 								"name": "WebActivityOutput",
 								"value": {
-									"value": "@string(activity('Doc_Analyze').output.Response)",
+									"value": "@string(activity('Final_Output').output.analyzeresult.content)",
 									"type": "Expression"
 								}
 							}
@@ -139,6 +149,33 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Final_Output",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Doc_Analyze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"headers": {
+						"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
+					},
+					"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read/analyzeResults/83ece27c-c86e-4d4d-a1e2-097f0f01c5de?api-version=2024-11-30"
+				}
 			}
 		],
 		"annotations": []
