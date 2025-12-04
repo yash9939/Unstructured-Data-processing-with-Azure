@@ -367,6 +367,209 @@
 				"[concat(variables('factoryId'), '/datasets/dummydataset')]",
 				"[concat(variables('factoryId'), '/datasets/futurepipeoutput')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/futurepipleine_copy1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Input_Meta_Data').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Input_Meta_Data",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "futurepipebinary",
+											"type": "DatasetReference",
+											"parameters": {}
+										},
+										"fieldList": [
+											"childItems"
+										],
+										"storeSettings": {
+											"type": "AzureBlobStorageReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "BinaryReadSettings"
+										}
+									}
+								},
+								{
+									"name": "Doc_Analyze",
+									"type": "WebActivity",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [
+										{
+											"activity": "Input_Meta_Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"method": "POST",
+										"headers": {
+											"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V",
+											"Content-Type": "application/json"
+										},
+										"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
+										"body": {
+											"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/raw-docs?sp=r&st=2025-12-04T06:41:20Z&se=2025-12-04T11:30:00Z&sv=2024-11-04&sr=c&sig=yrbbU5fMUHU2UNEiGtCEBAJkGaxwZ5vwhKujSWuAfak%3D',\n)",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "Basic",
+											"username": "future_pipe",
+											"password": {
+												"type": "SecureString",
+												"value": "**********"
+											}
+										}
+									}
+								},
+								{
+									"name": "Final_Output",
+									"type": "WebActivity",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [
+										{
+											"activity": "Doc_Analyze",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"method": "GET",
+										"headers": {
+											"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
+										},
+										"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read/analyzeResults/83ece27c-c86e-4d4d-a1e2-097f0f01c5de?api-version=2024-11-30"
+									}
+								},
+								{
+									"name": "save_to_processed",
+									"type": "Copy",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [
+										{
+											"activity": "Final_Output",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"additionalColumns": [
+												{
+													"name": "WebActivityOutput",
+													"value": {
+														"value": "@string(activity('Final_Output').output.analyzeresult.content)",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "dummydataset",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "futurepipeoutput",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/futurepipebinary')]",
+				"[concat(variables('factoryId'), '/datasets/dummydataset')]",
+				"[concat(variables('factoryId'), '/datasets/futurepipeoutput')]"
+			]
 		}
 	]
 }
