@@ -5,7 +5,14 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Input_Meta_Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
@@ -15,48 +22,11 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Input_Meta_Data",
-							"type": "GetMetadata",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"dataset": {
-									"referenceName": "futurepipebinary",
-									"type": "DatasetReference"
-								},
-								"fieldList": [
-									"childItems"
-								],
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
-								}
-							}
-						},
-						{
 							"name": "Doc_Analyze",
 							"type": "WebActivity",
 							"state": "Inactive",
 							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [
-								{
-									"activity": "Input_Meta_Data",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -73,7 +43,7 @@
 								},
 								"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
 								"body": {
-									"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/raw-docs?sp=r&st=2025-12-04T06:41:20Z&se=2025-12-04T11:30:00Z&sv=2024-11-04&sr=c&sig=yrbbU5fMUHU2UNEiGtCEBAJkGaxwZ5vwhKujSWuAfak%3D',\n)",
+									"value": "@json(concat(\n  'https://futurestorage.blob.core.windows.net/raw-docs/',\n  item().name,\n  '?sp=r&st=2025-12-04T06:41:20Z&se=2025-12-04T11:30:00Z&sv=2024-11-04&sr=c&sig=yrbbU5fMUHU2UNEiGtCEBAJkGaxwZ5vwhKujSWuAfak%3D'\n))",
 									"type": "Expression"
 								},
 								"authentication": {
@@ -118,8 +88,6 @@
 						{
 							"name": "save_to_processed",
 							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Final_Output",
@@ -182,6 +150,36 @@
 							]
 						}
 					]
+				}
+			},
+			{
+				"name": "Input_Meta_Data",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "futurepipebinary",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "BinaryReadSettings"
+					}
 				}
 			}
 		],
