@@ -191,9 +191,6 @@
 			}
 		],
 		"parameters": {
-			"loop_input": {
-				"type": "array"
-			},
 			"sasToken": {
 				"type": "string",
 				"defaultValue": "?sp=r&st=2025-12-04T17:45:39Z&se=2025-12-04T19:30:39Z&spr=https&sv=2024-11-04&sr=c&sig=WjmXTYDVUZb0FE%2FB451b1eF79AA3EuXccfPcrsayLLQ%3D"
