@@ -41,7 +41,7 @@
 								},
 								"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
 								"body": {
-									"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  item().name,\n  'sp=r&st=2025-12-04T17:45:39Z&se=2025-12-04T19:30:39Z&spr=https&sv=2024-11-04&sr=c&sig=WjmXTYDVUZb0FE%2FB451b1eF79AA3EuXccfPcrsayLLQ%3D\"}'\n))\n",
+									"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  item().name,\n  pipeline().parameters.sasToken,\n  '\"}'\n))\n\n",
 									"type": "Expression"
 								}
 							}
@@ -141,41 +141,6 @@
 							]
 						},
 						{
-							"name": "Copy data1",
-							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "DelimitedTextSource",
-									"storeSettings": {
-										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
-									}
-								},
-								"enableStaging": false
-							},
-							"inputs": [
-								{
-									"referenceName": "dummydataset",
-									"type": "DatasetReference"
-								}
-							]
-						},
-						{
 							"name": "Wait1",
 							"type": "Wait",
 							"dependsOn": [
@@ -229,8 +194,9 @@
 			"loop_input": {
 				"type": "array"
 			},
-			"filename": {
-				"type": "string"
+			"sasToken": {
+				"type": "string",
+				"defaultValue": "?sp=r&st=2025-12-04T17:45:39Z&se=2025-12-04T19:30:39Z&spr=https&sv=2024-11-04&sr=c&sig=WjmXTYDVUZb0FE%2FB451b1eF79AA3EuXccfPcrsayLLQ%3D"
 			}
 		},
 		"annotations": []
