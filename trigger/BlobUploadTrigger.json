@@ -1,5 +1,5 @@
 {
-	"name": "BlobUploaTrigger",
+	"name": "BlobUploadTrigger",
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Stopped",
