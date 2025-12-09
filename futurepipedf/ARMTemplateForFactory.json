@@ -27,6 +27,10 @@
 			"type": "string",
 			"defaultValue": "future.pipe"
 		},
+		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken": {
+			"type": "string",
+			"defaultValue": "sp=r&st=2025-12-09T16:56:22Z&se=2025-12-09T19:00:22Z&spr=https&sv=2024-11-04&sr=c&sig=NT3E6A6xaBMvOoY8TvKMbjc%2FX%2FW9f74jkFjDohtZDC4%3D"
+		},
 		"BlobUploadTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/876eec15-65a4-4faa-891e-69b1efd6308a/resourceGroups/Future_pipe/providers/Microsoft.Storage/storageAccounts/futurestorage"
@@ -277,7 +281,7 @@
 										},
 										"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
 										"body": {
-											"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  item().name,\n  pipeline().parameters.sasToken,\n  '\"}'\n))\n\n",
+											"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  item().name,'?',\n  pipeline().parameters.sasToken,\n  '\"}'\n))\n\n",
 											"type": "Expression"
 										}
 									}
@@ -315,14 +319,9 @@
 								{
 									"name": "save_to_processed",
 									"type": "Copy",
-									"dependsOn": [
-										{
-											"activity": "Final_Output",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [],
 									"policy": {
 										"timeout": "0.12:00:00",
 										"retry": 0,
@@ -393,6 +392,41 @@
 									"typeProperties": {
 										"waitTimeInSeconds": 10
 									}
+								},
+								{
+									"name": "save_result_to_blob",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Final_Output",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"method": "PUT",
+										"headers": {
+											"x-ms-blob-type": "BlockBlob",
+											"Content-Type": "application/json"
+										},
+										"url": {
+											"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/processed/',\n  replace(\n    replace(\n      replace(item().name, '.jpeg', ''),\n      '.jpg', ''\n    ),\n    '.png', ''\n  ),\n  '.json?',\n  pipeline().parameters.processedsastoken\n)",
+											"type": "Expression"
+										},
+										"body": {
+											"value": "@string(activity('Final_Output').output.analyzeresult.content)",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
@@ -435,7 +469,11 @@
 				"parameters": {
 					"sasToken": {
 						"type": "string",
-						"defaultValue": "sp=r&st=2025-12-09T16:56:22Z&se=2025-12-09T19:00:22Z&spr=https&sv=2024-11-04&sr=c&sig=NT3E6A6xaBMvOoY8TvKMbjc%2FX%2FW9f74jkFjDohtZDC4%3D"
+						"defaultValue": "sp=r&st=2025-12-09T17:29:11Z&se=2025-12-10T01:44:11Z&spr=https&sv=2024-11-04&sr=c&sig=7MRWMv3j8F3bD2oVtTg2GqlGurjYdro5HJ9Iqdv6ZC8%3D"
+					},
+					"processedsastoken": {
+						"type": "string",
+						"defaultValue": "sp=racw&st=2025-12-09T17:49:37Z&se=2025-12-10T02:04:37Z&spr=https&sv=2024-11-04&sr=c&sig=on85Bqoxc2F0n%2Fgt6OIKKXADSPMjr7yfj%2B09z6MyJhU%3D"
 					}
 				},
 				"annotations": []
@@ -599,7 +637,9 @@
 							"referenceName": "futurepipleine_copy1",
 							"type": "PipelineReference"
 						},
-						"parameters": {}
+						"parameters": {
+							"sasToken": "[parameters('BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken')]"
+						}
 					}
 				],
 				"type": "BlobEventsTrigger",
