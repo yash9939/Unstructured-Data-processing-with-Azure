@@ -27,7 +27,7 @@
 			"type": "string",
 			"defaultValue": "future.pipe"
 		},
-		"BlobUploaTrigger_properties_typeProperties_scope": {
+		"BlobUploadTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/876eec15-65a4-4faa-891e-69b1efd6308a/resourceGroups/Future_pipe/providers/Microsoft.Storage/storageAccounts/futurestorage"
 		},
@@ -73,8 +73,8 @@
 					"futurepipedocai_properties_typeProperties_userName": {
 						"value": "[parameters('futurepipedocai_properties_typeProperties_userName')]"
 					},
-					"BlobUploaTrigger_properties_typeProperties_scope": {
-						"value": "[parameters('BlobUploaTrigger_properties_typeProperties_scope')]"
+					"BlobUploadTrigger_properties_typeProperties_scope": {
+						"value": "[parameters('BlobUploadTrigger_properties_typeProperties_scope')]"
 					}
 				}
 			},

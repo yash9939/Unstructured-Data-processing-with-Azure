@@ -27,7 +27,7 @@
 			"type": "string",
 			"defaultValue": "future.pipe"
 		},
-		"BlobUploaTrigger_properties_typeProperties_scope": {
+		"BlobUploadTrigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/876eec15-65a4-4faa-891e-69b1efd6308a/resourceGroups/Future_pipe/providers/Microsoft.Storage/storageAccounts/futurestorage"
 		}
@@ -435,7 +435,7 @@
 				"parameters": {
 					"sasToken": {
 						"type": "string",
-						"defaultValue": "?sp=r&st=2025-12-04T17:45:39Z&se=2025-12-04T19:30:39Z&spr=https&sv=2024-11-04&sr=c&sig=WjmXTYDVUZb0FE%2FB451b1eF79AA3EuXccfPcrsayLLQ%3D"
+						"defaultValue": "sp=r&st=2025-12-09T16:56:22Z&se=2025-12-09T19:00:22Z&spr=https&sv=2024-11-04&sr=c&sig=NT3E6A6xaBMvOoY8TvKMbjc%2FX%2FW9f74jkFjDohtZDC4%3D"
 					}
 				},
 				"annotations": []
@@ -587,24 +587,34 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/BlobUploaTrigger')]",
+			"name": "[concat(parameters('factoryName'), '/BlobUploadTrigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"runtimeState": "Stopped",
-				"pipelines": [],
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "futurepipleine_copy1",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
 					"blobPathBeginsWith": "/raw-docs/blobs/",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('BlobUploaTrigger_properties_typeProperties_scope')]",
+					"scope": "[parameters('BlobUploadTrigger_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/futurepipleine_copy1')]"
+			]
 		}
 	]
 }
