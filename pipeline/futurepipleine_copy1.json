@@ -51,7 +51,7 @@
 							"type": "WebActivity",
 							"dependsOn": [
 								{
-									"activity": "Wait1",
+									"activity": "Doc_Analyze",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -138,14 +138,9 @@
 						{
 							"name": "Wait1",
 							"type": "Wait",
-							"dependsOn": [
-								{
-									"activity": "Doc_Analyze",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
 								"waitTimeInSeconds": 10
