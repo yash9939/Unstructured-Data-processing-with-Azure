@@ -469,11 +469,11 @@
 				"parameters": {
 					"sasToken": {
 						"type": "string",
-						"defaultValue": "sp=r&st=2025-12-09T17:29:11Z&se=2025-12-10T01:44:11Z&spr=https&sv=2024-11-04&sr=c&sig=7MRWMv3j8F3bD2oVtTg2GqlGurjYdro5HJ9Iqdv6ZC8%3D"
+						"defaultValue": "sp=r&st=2025-12-10T08:55:45Z&se=2025-12-10T17:10:45Z&spr=https&sv=2024-11-04&sr=c&sig=UibGtUuyJOEcOGHnzDiArkdE4xMaeNX%2B7QLJqUFy278%3D"
 					},
 					"processedsastoken": {
 						"type": "string",
-						"defaultValue": "sp=racw&st=2025-12-09T17:49:37Z&se=2025-12-10T02:04:37Z&spr=https&sv=2024-11-04&sr=c&sig=on85Bqoxc2F0n%2Fgt6OIKKXADSPMjr7yfj%2B09z6MyJhU%3D"
+						"defaultValue": "sp=racw&st=2025-12-10T08:57:43Z&se=2025-12-10T17:12:43Z&spr=https&sv=2024-11-04&sr=c&sig=0uWcwE8%2Ftg7y%2F5jZzDd%2B%2BLUlnb8scgO7CcVW1e26EOY%3D"
 					}
 				},
 				"annotations": []
