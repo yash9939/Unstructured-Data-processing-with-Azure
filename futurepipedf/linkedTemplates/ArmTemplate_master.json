@@ -29,7 +29,11 @@
 		},
 		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken": {
 			"type": "string",
-			"defaultValue": "sp=r&st=2025-12-09T16:56:22Z&se=2025-12-09T19:00:22Z&spr=https&sv=2024-11-04&sr=c&sig=NT3E6A6xaBMvOoY8TvKMbjc%2FX%2FW9f74jkFjDohtZDC4%3D"
+			"defaultValue": "sp=r&st=2025-12-11T04:44:34Z&se=2025-12-11T12:59:34Z&spr=https&sv=2024-11-04&sr=c&sig=RCChQLTf0adlWdGpHejGU7Qz%2FkKGPy2eObQ%2FSRWSp84%3D"
+		},
+		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken": {
+			"type": "string",
+			"defaultValue": "sp=r&st=2025-12-11T04:50:38Z&se=2025-12-11T13:05:38Z&spr=https&sv=2024-11-04&sr=c&sig=kjTzfweVn7i7LEjIgknDKVyioJWzMXZVoVxtAiWk8ug%3D"
 		},
 		"BlobUploadTrigger_properties_typeProperties_scope": {
 			"type": "string",
@@ -79,6 +83,9 @@
 					},
 					"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken": {
 						"value": "[parameters('BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken')]"
+					},
+					"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken": {
+						"value": "[parameters('BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken')]"
 					},
 					"BlobUploadTrigger_properties_typeProperties_scope": {
 						"value": "[parameters('BlobUploadTrigger_properties_typeProperties_scope')]"
