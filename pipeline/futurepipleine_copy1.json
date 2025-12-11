@@ -180,34 +180,6 @@
 									"type": "Expression"
 								}
 							}
-						},
-						{
-							"name": "save_result_to_blob_copy1",
-							"type": "WebActivity",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"method": "PUT",
-								"headers": {
-									"x-ms-blob-type": "BlockBlob",
-									"Content-Type": "application/json"
-								},
-								"url": {
-									"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/processed/',\n  replace(\n    replace(\n      replace(item().name, '.jpeg', ''),\n      '.jpg', ''\n    ),\n    '.png', ''\n  ),\n  '.json?',\n  pipeline().parameters.processedsastoken\n)",
-									"type": "Expression"
-								},
-								"body": {
-									"value": "@string(activity('Final_Output').output.analyzecontent.content)",
-									"type": "Expression"
-								}
-							}
 						}
 					]
 				}
@@ -250,7 +222,7 @@
 			},
 			"processedsastoken": {
 				"type": "string",
-				"defaultValue": "sp=r&st=2025-12-11T04:50:38Z&se=2025-12-11T13:05:38Z&spr=https&sv=2024-11-04&sr=c&sig=kjTzfweVn7i7LEjIgknDKVyioJWzMXZVoVxtAiWk8ug%3D"
+				"defaultValue": "sp=racw&st=2025-12-11T05:29:07Z&se=2025-12-11T13:44:07Z&spr=https&sv=2024-11-04&sr=c&sig=iJ2sk%2BUF161kb05sV8pswPHW6ZAHIWIDmpv027SH2hg%3D"
 			}
 		},
 		"annotations": []
