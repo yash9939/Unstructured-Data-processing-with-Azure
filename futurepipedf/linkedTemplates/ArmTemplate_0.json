@@ -435,7 +435,7 @@
 									"type": "WebActivity",
 									"dependsOn": [
 										{
-											"activity": "Doc_Analyze",
+											"activity": "Wait1",
 											"dependencyConditions": [
 												"Succeeded"
 											]
@@ -522,17 +522,6 @@
 									]
 								},
 								{
-									"name": "Wait1",
-									"type": "Wait",
-									"state": "Inactive",
-									"onInactiveMarkAs": "Succeeded",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"waitTimeInSeconds": 10
-									}
-								},
-								{
 									"name": "save_result_to_blob",
 									"type": "WebActivity",
 									"dependsOn": [
@@ -562,9 +551,25 @@
 											"type": "Expression"
 										},
 										"body": {
-											"value": "@string(activity('Final_Output').output.analyzeResult.content)",
+											"value": "@string(activity('Final_Output').output)",
 											"type": "Expression"
 										}
+									}
+								},
+								{
+									"name": "Wait1",
+									"type": "Wait",
+									"dependsOn": [
+										{
+											"activity": "Doc_Analyze",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 20
 									}
 								}
 							]
