@@ -411,7 +411,7 @@
 											"type": "Expression"
 										},
 										"body": {
-											"value": "@string(activity('Final_Output').output)",
+											"value": "@if(\n  contains(activity('Final_Output').output, 'analyzeResult'),\n  string(activity('Final_Output').output.analyzeResult.content),\n  string(activity('Final_Output').output)\n)",
 											"type": "Expression"
 										}
 									}
@@ -429,7 +429,7 @@
 									],
 									"userProperties": [],
 									"typeProperties": {
-										"waitTimeInSeconds": 20
+										"waitTimeInSeconds": 12
 									}
 								}
 							]
