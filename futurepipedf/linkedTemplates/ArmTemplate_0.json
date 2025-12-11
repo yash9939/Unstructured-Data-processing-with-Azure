@@ -33,7 +33,7 @@
 		},
 		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken": {
 			"type": "string",
-			"defaultValue": "sp=r&st=2025-12-11T04:50:38Z&se=2025-12-11T13:05:38Z&spr=https&sv=2024-11-04&sr=c&sig=kjTzfweVn7i7LEjIgknDKVyioJWzMXZVoVxtAiWk8ug%3D"
+			"defaultValue": "sp=racw&st=2025-12-11T05:29:07Z&se=2025-12-11T13:44:07Z&spr=https&sv=2024-11-04&sr=c&sig=iJ2sk%2BUF161kb05sV8pswPHW6ZAHIWIDmpv027SH2hg%3D"
 		},
 		"BlobUploadTrigger_properties_typeProperties_scope": {
 			"type": "string",
@@ -562,7 +562,7 @@
 											"type": "Expression"
 										},
 										"body": {
-											"value": "@string(activity('Final_Output').output.analyzeresult.content)",
+											"value": "@string(activity('Final_Output').output.analyzeResult.content)",
 											"type": "Expression"
 										}
 									}
@@ -612,7 +612,7 @@
 					},
 					"processedsastoken": {
 						"type": "string",
-						"defaultValue": "sp=r&st=2025-12-11T04:50:38Z&se=2025-12-11T13:05:38Z&spr=https&sv=2024-11-04&sr=c&sig=kjTzfweVn7i7LEjIgknDKVyioJWzMXZVoVxtAiWk8ug%3D"
+						"defaultValue": "sp=racw&st=2025-12-11T05:29:07Z&se=2025-12-11T13:44:07Z&spr=https&sv=2024-11-04&sr=c&sig=iJ2sk%2BUF161kb05sV8pswPHW6ZAHIWIDmpv027SH2hg%3D"
 					}
 				},
 				"annotations": []
