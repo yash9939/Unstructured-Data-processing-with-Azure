@@ -29,11 +29,11 @@
 		},
 		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken": {
 			"type": "string",
-			"defaultValue": "sp=r&st=2025-12-11T04:44:34Z&se=2025-12-11T12:59:34Z&spr=https&sv=2024-11-04&sr=c&sig=RCChQLTf0adlWdGpHejGU7Qz%2FkKGPy2eObQ%2FSRWSp84%3D"
+			"defaultValue": "sp=r&st=2025-12-12T09:43:44Z&se=2025-12-12T17:58:44Z&spr=https&sv=2024-11-04&sr=c&sig=ChFtJ6Q%2FGwjvYmJ9F9aK5CeNx%2F%2F93FdEPI7g8sTIuvs%3D"
 		},
 		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken": {
 			"type": "string",
-			"defaultValue": "sp=racw&st=2025-12-11T05:29:07Z&se=2025-12-11T13:44:07Z&spr=https&sv=2024-11-04&sr=c&sig=iJ2sk%2BUF161kb05sV8pswPHW6ZAHIWIDmpv027SH2hg%3D"
+			"defaultValue": "sp=racw&st=2025-12-12T09:44:26Z&se=2025-12-12T17:59:26Z&spr=https&sv=2024-11-04&sr=c&sig=nEVMovtsOCbpteb7qtAfK3txCalt8qtYtCZl%2FXyPqz4%3D"
 		},
 		"BlobUploadTrigger_properties_typeProperties_scope": {
 			"type": "string",
@@ -473,11 +473,11 @@
 				"parameters": {
 					"sasToken": {
 						"type": "string",
-						"defaultValue": "sp=r&st=2025-12-11T04:44:34Z&se=2025-12-11T12:59:34Z&spr=https&sv=2024-11-04&sr=c&sig=RCChQLTf0adlWdGpHejGU7Qz%2FkKGPy2eObQ%2FSRWSp84%3D"
+						"defaultValue": "sp=r&st=2025-12-12T09:43:44Z&se=2025-12-12T17:58:44Z&spr=https&sv=2024-11-04&sr=c&sig=ChFtJ6Q%2FGwjvYmJ9F9aK5CeNx%2F%2F93FdEPI7g8sTIuvs%3D"
 					},
 					"processedsastoken": {
 						"type": "string",
-						"defaultValue": "sp=racw&st=2025-12-11T05:29:07Z&se=2025-12-11T13:44:07Z&spr=https&sv=2024-11-04&sr=c&sig=iJ2sk%2BUF161kb05sV8pswPHW6ZAHIWIDmpv027SH2hg%3D"
+						"defaultValue": "sp=racw&st=2025-12-12T09:44:26Z&se=2025-12-12T17:59:26Z&spr=https&sv=2024-11-04&sr=c&sig=nEVMovtsOCbpteb7qtAfK3txCalt8qtYtCZl%2FXyPqz4%3D"
 					}
 				},
 				"annotations": []
