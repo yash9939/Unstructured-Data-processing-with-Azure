@@ -165,7 +165,7 @@
 									"type": "Expression"
 								},
 								"body": {
-									"value": "@if(\n  contains(activity('Final_Output').output, 'analyzeResult'),\n  string(activity('Final_Output').output.analyzeResult.content),\n  string(activity('Final_Output').output)\n)",
+									"value": "@string(activity('Final_Output').output)",
 									"type": "Expression"
 								}
 							}
