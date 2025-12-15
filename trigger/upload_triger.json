@@ -1,0 +1,17 @@
+{
+	"name": "upload_triger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/raw-docs/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/876eec15-65a4-4faa-891e-69b1efd6308a/resourceGroups/Future_pipe/providers/Microsoft.Storage/storageAccounts/futurestorage",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
