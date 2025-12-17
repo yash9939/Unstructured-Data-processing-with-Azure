@@ -84,7 +84,7 @@
 					},
 					"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
 					"body": {
-						"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  item().name,'?',\n  pipeline().parameters.sasToken,\n  '\"}'\n))\n\n",
+						"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  pipeline().parameters.src_file,'?',\n  pipeline().parameters.sasToken,\n  '\"}'\n))",
 						"type": "Expression"
 					}
 				}
@@ -115,7 +115,7 @@
 						"Content-Type": "application/json"
 					},
 					"url": {
-						"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/processed/',\n  replace(\n    replace(\n      replace(item().name, '.jpeg', ''),\n      '.jpg', ''\n    ),\n    '.png', ''\n  ),\n  '.json?',\n  pipeline().parameters.processedsastoken\n)",
+						"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/processed/',\n  replace(\n    replace(\n      replace(pipeline().parameters.src_file, '.jpeg', ''),\n      '.jpg', ''\n    ),\n    '.png', ''\n  ),\n  '.json?',\n  pipeline().parameters.processedsastoken\n)",
 						"type": "Expression"
 					},
 					"body": {
@@ -164,7 +164,7 @@
 						"referenceName": "futurepipebinary",
 						"type": "DatasetReference"
 					},
-					"enableLogging": true,
+					"enableLogging": false,
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
 						"recursive": true,
@@ -181,6 +181,10 @@
 			"processedsastoken": {
 				"type": "string",
 				"defaultValue": "sp=racw&st=2025-12-12T09:44:26Z&se=2025-12-12T17:59:26Z&spr=https&sv=2024-11-04&sr=c&sig=nEVMovtsOCbpteb7qtAfK3txCalt8qtYtCZl%2FXyPqz4%3D"
+			},
+			"src_file": {
+				"type": "string",
+				"defaultValue": "@triggerBody().filename"
 			}
 		},
 		"annotations": []
