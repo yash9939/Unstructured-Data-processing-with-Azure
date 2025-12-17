@@ -21,7 +21,7 @@
 			"value": "future.pipe"
 		},
 		"upload_triger_properties_futurepipleine_copy1_parameters_src_file": {
-			"value": "@triggerBody().filename"
+			"value": "@triggerBody().fileName"
 		},
 		"upload_triger_properties_typeProperties_scope": {
 			"value": "/subscriptions/876eec15-65a4-4faa-891e-69b1efd6308a/resourceGroups/Future_pipe/providers/Microsoft.Storage/storageAccounts/futurestorage"
