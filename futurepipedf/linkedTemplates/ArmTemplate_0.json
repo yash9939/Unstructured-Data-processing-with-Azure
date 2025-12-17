@@ -189,6 +189,8 @@
 					{
 						"name": "Input_Meta_Data",
 						"type": "GetMetadata",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -234,14 +236,9 @@
 					{
 						"name": "Doc_Analyze",
 						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Input_Meta_Data",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -274,14 +271,9 @@
 					{
 						"name": "save_to_processed",
 						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Final_Output",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -340,14 +332,9 @@
 					{
 						"name": "Final_Output",
 						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Doc_Analyze",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -566,24 +553,14 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"sasToken": {
-						"type": "string",
-						"defaultValue": "sp=r&st=2025-12-12T09:43:44Z&se=2025-12-12T17:58:44Z&spr=https&sv=2024-11-04&sr=c&sig=ChFtJ6Q%2FGwjvYmJ9F9aK5CeNx%2F%2F93FdEPI7g8sTIuvs%3D"
-					},
-					"processedsastoken": {
-						"type": "string",
-						"defaultValue": "sp=racw&st=2025-12-12T09:44:26Z&se=2025-12-12T17:59:26Z&spr=https&sv=2024-11-04&sr=c&sig=nEVMovtsOCbpteb7qtAfK3txCalt8qtYtCZl%2FXyPqz4%3D"
-					},
 					"src_file": {
-						"type": "string",
-						"defaultValue": "@triggerBody().filename"
+						"type": "string"
 					}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/futurepipebinary')]",
-				"[concat(variables('factoryId'), '/linkedServices/futurepipeblobstorage')]"
+				"[concat(variables('factoryId'), '/datasets/futurepipebinary')]"
 			]
 		},
 		{
