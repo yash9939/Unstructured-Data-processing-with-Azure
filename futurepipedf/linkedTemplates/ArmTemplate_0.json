@@ -496,12 +496,19 @@
 								"Content-Type": "application/json"
 							},
 							"url": {
-								"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/processed/',\n  replace(\n    replace(\n      replace(pipeline().parameters.src_file, '.jpeg', ''),\n      '.jpg', ''\n    ),\n    '.png', ''\n  ),\n  '.json?',\n  pipeline().parameters.processedsastoken\n)",
+								"value": "@concat('https://futurestorage.blob.core.windows.net/processed/', split(pipeline().parameters.src_file, '.')[0], '.json')",
 								"type": "Expression"
 							},
 							"body": {
 								"value": "@string(activity('Final_Output').output)",
 								"type": "Expression"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": {
+									"value": "https://storage.azure.com/",
+									"type": "Expression"
+								}
 							}
 						}
 					},
