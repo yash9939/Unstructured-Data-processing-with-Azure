@@ -8,6 +8,9 @@
 				"pipelineReference": {
 					"referenceName": "futurepipleine_copy1",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"src_file": "@triggerBody().filename"
 				}
 			}
 		],
