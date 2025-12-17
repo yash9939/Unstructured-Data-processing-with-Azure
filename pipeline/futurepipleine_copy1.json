@@ -181,15 +181,8 @@
 			}
 		],
 		"parameters": {
-			"sasToken": {
-				"type": "string"
-			},
-			"processedsastoken": {
-				"type": "string"
-			},
 			"src_file": {
-				"type": "string",
-				"defaultValue": "@triggerBody().filename"
+				"type": "string"
 			}
 		},
 		"annotations": []
