@@ -5,6 +5,8 @@
 			{
 				"name": "Input_Meta_Data",
 				"type": "GetMetadata",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -49,14 +51,9 @@
 			{
 				"name": "Doc_Analyze",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "Input_Meta_Data",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -89,14 +86,9 @@
 			{
 				"name": "save_to_processed",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Final_Output",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -153,14 +145,9 @@
 			{
 				"name": "Final_Output",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "Doc_Analyze",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
