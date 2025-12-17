@@ -84,7 +84,7 @@
 					},
 					"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
 					"body": {
-						"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  pipeline().parameters.src_file,'?',\n  pipeline().parameters.sasToken,\n  '\"}'\n))",
+						"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  pipeline().parameters.src_file,\n  '\"}'\n))",
 						"type": "Expression"
 					}
 				}
