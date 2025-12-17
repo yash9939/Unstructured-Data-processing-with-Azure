@@ -27,15 +27,7 @@
 			"type": "string",
 			"defaultValue": "future.pipe"
 		},
-		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken": {
-			"type": "string",
-			"defaultValue": "sp=r&st=2025-12-12T09:43:44Z&se=2025-12-12T17:58:44Z&spr=https&sv=2024-11-04&sr=c&sig=ChFtJ6Q%2FGwjvYmJ9F9aK5CeNx%2F%2F93FdEPI7g8sTIuvs%3D"
-		},
-		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken": {
-			"type": "string",
-			"defaultValue": "sp=racw&st=2025-12-12T09:44:26Z&se=2025-12-12T17:59:26Z&spr=https&sv=2024-11-04&sr=c&sig=nEVMovtsOCbpteb7qtAfK3txCalt8qtYtCZl%2FXyPqz4%3D"
-		},
-		"BlobUploadTrigger_properties_typeProperties_scope": {
+		"upload_triger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/876eec15-65a4-4faa-891e-69b1efd6308a/resourceGroups/Future_pipe/providers/Microsoft.Storage/storageAccounts/futurestorage"
 		}
@@ -247,197 +239,10 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Input_Meta_Data",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Input_Meta_Data').output.childItems",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Doc_Analyze",
-									"type": "WebActivity",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"method": "POST",
-										"headers": {
-											"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V",
-											"Content-Type": "application/json"
-										},
-										"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
-										"body": {
-											"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  item().name,'?',\n  pipeline().parameters.sasToken,\n  '\"}'\n))\n\n",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "Final_Output",
-									"type": "WebActivity",
-									"dependsOn": [
-										{
-											"activity": "Wait1",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"method": "GET",
-										"headers": {
-											"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
-										},
-										"url": {
-											"value": "@activity('Doc_Analyze').output.ADFWebActivityResponseHeaders['Operation-Location']\n",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "save_to_processed",
-									"type": "Copy",
-									"state": "Inactive",
-									"onInactiveMarkAs": "Succeeded",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "DelimitedTextSource",
-											"additionalColumns": [
-												{
-													"name": "WebActivityOutput",
-													"value": {
-														"value": "@string(activity('Final_Output').output.analyzeresult.content)",
-														"type": "Expression"
-													}
-												}
-											],
-											"storeSettings": {
-												"type": "AzureBlobStorageReadSettings",
-												"recursive": true,
-												"enablePartitionDiscovery": false
-											},
-											"formatSettings": {
-												"type": "DelimitedTextReadSettings"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobStorageWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "dummydataset",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "futurepipeoutput",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									]
-								},
-								{
-									"name": "save_result_to_blob",
-									"type": "WebActivity",
-									"dependsOn": [
-										{
-											"activity": "Final_Output",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"method": "PUT",
-										"headers": {
-											"x-ms-blob-type": "BlockBlob",
-											"Content-Type": "application/json"
-										},
-										"url": {
-											"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/processed/',\n  replace(\n    replace(\n      replace(item().name, '.jpeg', ''),\n      '.jpg', ''\n    ),\n    '.png', ''\n  ),\n  '.json?',\n  pipeline().parameters.processedsastoken\n)",
-											"type": "Expression"
-										},
-										"body": {
-											"value": "@string(activity('Final_Output').output)",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "Wait1",
-									"type": "Wait",
-									"dependsOn": [
-										{
-											"activity": "Doc_Analyze",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"waitTimeInSeconds": 12
-									}
-								}
-							]
-						}
-					},
-					{
 						"name": "Input_Meta_Data",
 						"type": "GetMetadata",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -465,6 +270,145 @@
 								"type": "BinaryReadSettings"
 							}
 						}
+					},
+					{
+						"name": "Final_Output",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "GET",
+							"headers": {
+								"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V"
+							},
+							"url": {
+								"value": "@activity('Doc_Analyze').output.ADFWebActivityResponseHeaders['Operation-Location']\n",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Doc_Analyze",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {
+								"Ocp-Apim-Subscription-Key": "8SJCDESgLo0LIZ7XW7qpOpPmk69c95xlBMMti1d5rkGLhVYYoNaUJQQJ99BKACGhslBXJ3w3AAALACOG7p6V",
+								"Content-Type": "application/json"
+							},
+							"url": "https://pipeai.cognitiveservices.azure.com/documentintelligence/documentModels/prebuilt-read:analyze?api-version=2024-11-30",
+							"body": {
+								"value": "@json(concat(\n  '{\"urlSource\":\"https://futurestorage.blob.core.windows.net/raw-docs/',\n  pipeline().parameters.src_file,'?',\n  pipeline().parameters.sasToken,\n  '\"}'\n))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "save_result_to_blob",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Final_Output",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "PUT",
+							"headers": {
+								"x-ms-blob-type": "BlockBlob",
+								"Content-Type": "application/json"
+							},
+							"url": {
+								"value": "@concat(\n  'https://futurestorage.blob.core.windows.net/processed/',\n  replace(\n    replace(\n      replace(pipeline().parameters.src_file, '.jpeg', ''),\n      '.jpg', ''\n    ),\n    '.png', ''\n  ),\n  '.json?',\n  pipeline().parameters.processedsastoken\n)",
+								"type": "Expression"
+							},
+							"body": {
+								"value": "@string(activity('Final_Output').output)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Doc_Analyze",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 12
+						}
+					},
+					{
+						"name": "Delete1",
+						"type": "Delete",
+						"dependsOn": [
+							{
+								"activity": "save_result_to_blob",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "futurepipebinary",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"enableLogging": false,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
 					}
 				],
 				"policy": {
@@ -478,14 +422,17 @@
 					"processedsastoken": {
 						"type": "string",
 						"defaultValue": "sp=racw&st=2025-12-12T09:44:26Z&se=2025-12-12T17:59:26Z&spr=https&sv=2024-11-04&sr=c&sig=nEVMovtsOCbpteb7qtAfK3txCalt8qtYtCZl%2FXyPqz4%3D"
+					},
+					"src_file": {
+						"type": "string",
+						"defaultValue": "@triggerBody().filename"
 					}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/futurepipebinary')]",
-				"[concat(variables('factoryId'), '/datasets/dummydataset')]",
-				"[concat(variables('factoryId'), '/datasets/futurepipeoutput')]"
+				"[concat(variables('factoryId'), '/linkedServices/futurepipeblobstorage')]"
 			]
 		},
 		{
@@ -629,7 +576,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/BlobUploadTrigger')]",
+			"name": "[concat(parameters('factoryName'), '/upload_triger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -641,17 +588,14 @@
 							"referenceName": "futurepipleine_copy1",
 							"type": "PipelineReference"
 						},
-						"parameters": {
-							"sasToken": "[parameters('BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken')]",
-							"processedsastoken": "[parameters('BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken')]"
-						}
+						"parameters": {}
 					}
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
 					"blobPathBeginsWith": "/raw-docs/blobs/",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('BlobUploadTrigger_properties_typeProperties_scope')]",
+					"scope": "[parameters('upload_triger_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]

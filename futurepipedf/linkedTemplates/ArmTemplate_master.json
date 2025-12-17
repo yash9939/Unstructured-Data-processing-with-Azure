@@ -27,15 +27,7 @@
 			"type": "string",
 			"defaultValue": "future.pipe"
 		},
-		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken": {
-			"type": "string",
-			"defaultValue": "sp=r&st=2025-12-12T09:43:44Z&se=2025-12-12T17:58:44Z&spr=https&sv=2024-11-04&sr=c&sig=ChFtJ6Q%2FGwjvYmJ9F9aK5CeNx%2F%2F93FdEPI7g8sTIuvs%3D"
-		},
-		"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken": {
-			"type": "string",
-			"defaultValue": "sp=racw&st=2025-12-12T09:44:26Z&se=2025-12-12T17:59:26Z&spr=https&sv=2024-11-04&sr=c&sig=nEVMovtsOCbpteb7qtAfK3txCalt8qtYtCZl%2FXyPqz4%3D"
-		},
-		"BlobUploadTrigger_properties_typeProperties_scope": {
+		"upload_triger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/876eec15-65a4-4faa-891e-69b1efd6308a/resourceGroups/Future_pipe/providers/Microsoft.Storage/storageAccounts/futurestorage"
 		},
@@ -81,14 +73,8 @@
 					"futurepipedocai_properties_typeProperties_userName": {
 						"value": "[parameters('futurepipedocai_properties_typeProperties_userName')]"
 					},
-					"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken": {
-						"value": "[parameters('BlobUploadTrigger_properties_futurepipleine_copy1_parameters_sasToken')]"
-					},
-					"BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken": {
-						"value": "[parameters('BlobUploadTrigger_properties_futurepipleine_copy1_parameters_processedsastoken')]"
-					},
-					"BlobUploadTrigger_properties_typeProperties_scope": {
-						"value": "[parameters('BlobUploadTrigger_properties_typeProperties_scope')]"
+					"upload_triger_properties_typeProperties_scope": {
+						"value": "[parameters('upload_triger_properties_typeProperties_scope')]"
 					}
 				}
 			},
