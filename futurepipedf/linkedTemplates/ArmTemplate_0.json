@@ -480,7 +480,8 @@
 							"method": "PUT",
 							"headers": {
 								"x-ms-blob-type": "BlockBlob",
-								"Content-Type": "application/json"
+								"Content-Type": "application/json",
+								"x-ms-version": "2020-04-08"
 							},
 							"url": {
 								"value": "@concat('https://futurestorage.blob.core.windows.net/processed/', split(pipeline().parameters.src_file, '.')[0], '.json')",
