@@ -21,35 +21,46 @@ This repository contains a complete solution for an **AI-powered document extrac
 
 ## 🧩 Architecture
 
-flowchart TD
-    subgraph Client
-        UI[Web Frontend<br/>(Upload Page)]
-    end
-
-    subgraph Backend
-        API[Backend Server<br/>(Express/Node.js)]
-    end
-
-    subgraph Azure
-        RawBlob[(Azure Blob: raw-docs)]
-        ADF[Azure Data Factory<br/>(Orchestration)]
-        DocIntel[Azure AI Document Intelligence]
-        ProcBlob[(Azure Blob: processed)]
-    end
-
-    UI -->|Upload file| API
-    API -->|Upload to storage| RawBlob
-    RawBlob -->|Trigger| ADF
-    ADF -->|Invoke AI| DocIntel
-    DocIntel -->|JSON output| ProcBlob
-    ProcBlob -->|Poll result| UI
-
-    style UI fill:#f9f,stroke:#333,stroke-width:1px
-    style API fill:#bbf,stroke:#333,stroke-width:1px
-    style RawBlob fill:#fbf,stroke:#333,stroke-width:1px
-    style ADF fill:#bfb,stroke:#333,stroke-width:1px
-    style DocIntel fill:#ffd,border:2px solid #333
-    style ProcBlob fill:#fbf,stroke:#333,stroke-width:1px
+                     +-----------------------+
+                     |   Web Frontend (UI)   |
+                     |  Document Upload Form |
+                     +-----------+-----------+
+                                 |
+                                 v
+                     +-----------------------+
+                     |  Backend API Server   |
+                     |   (Node.js / Express) |
+                     +-----------+-----------+
+                                 |
+                                 v
+                     +-----------------------+
+                     | Azure Blob Storage    |
+                     |     raw-docs          |
+                     +-----------+-----------+
+                                 |
+                                 v
+                     +-----------------------+
+                     | Azure Data Factory    |
+                     |   (Orchestration)     |
+                     +-----------+-----------+
+                                 |
+                                 v
+                     +-----------------------+
+                     | Azure Document        |
+                     |   Intelligence (AI)   |
+                     +-----------+-----------+
+                                 |
+                                 v
+                     +-----------------------+
+                     | Azure Blob Storage    |
+                     |   processed JSON      |
+                     +-----------+-----------+
+                                 |
+                                 v
+                     +-----------------------+
+                     | Web Frontend (UI)     |
+                     |    Poll and Display   |
+                     +-----------------------+
     
 ---
 
