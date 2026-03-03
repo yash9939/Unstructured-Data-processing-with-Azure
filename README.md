@@ -71,7 +71,7 @@ This repository contains a complete solution for an **AI-powered document extrac
 | Azure Blob Storage | Stores raw and processed files |
 | Azure Data Factory | Orchestrates document analysis pipeline |
 | Azure AI Document Intelligence | Performs OCR and generates structured output |
-| Node.js / Express | Backend API to handle uploads |
+| Python | Backend API to handle uploads |
 | Vanilla HTML/CSS/JS | Frontend UI |
 | SAS Tokens | Secure upload & access to blobs |
 
