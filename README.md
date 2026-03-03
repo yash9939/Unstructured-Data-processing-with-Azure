@@ -20,21 +20,36 @@ This repository contains a complete solution for an **AI-powered document extrac
 ---
 
 ## 🧩 Architecture
-Web Frontend (HTML/JS)
-↓
-API Backend (Node.js/Express)
-↓
-Azure Blob Storage (raw-docs container)
-↓ (trigger)
-Azure Data Factory
-↓ (invoke AI)
-Azure AI Document Intelligence
-↓
-Azure Blob Storage (processed container)
-↓
-Frontend poll → display JSON
 
+flowchart TD
+    subgraph Client
+        UI[Web Frontend<br/>(Upload Page)]
+    end
 
+    subgraph Backend
+        API[Backend Server<br/>(Express/Node.js)]
+    end
+
+    subgraph Azure
+        RawBlob[(Azure Blob: raw-docs)]
+        ADF[Azure Data Factory<br/>(Orchestration)]
+        DocIntel[Azure AI Document Intelligence]
+        ProcBlob[(Azure Blob: processed)]
+    end
+
+    UI -->|Upload file| API
+    API -->|Upload to storage| RawBlob
+    RawBlob -->|Trigger| ADF
+    ADF -->|Invoke AI| DocIntel
+    DocIntel -->|JSON output| ProcBlob
+    ProcBlob -->|Poll result| UI
+
+    style UI fill:#f9f,stroke:#333,stroke-width:1px
+    style API fill:#bbf,stroke:#333,stroke-width:1px
+    style RawBlob fill:#fbf,stroke:#333,stroke-width:1px
+    style ADF fill:#bfb,stroke:#333,stroke-width:1px
+    style DocIntel fill:#ffd,border:2px solid #333
+    style ProcBlob fill:#fbf,stroke:#333,stroke-width:1px
 ---
 
 ## 🛠️ Tech Stack
