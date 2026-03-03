@@ -29,7 +29,7 @@ This repository contains a complete solution for an **AI-powered document extrac
                                  v
                      +-----------------------+
                      |  Backend API Server   |
-                     |   (Node.js / Express) |
+                     |       (Python)        |
                      +-----------+-----------+
                                  |
                                  v
